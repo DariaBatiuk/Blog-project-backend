@@ -1,8 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
-import { registerValidation, loginValidation } from "./validations.js";
+import { registerValidation, loginValidation, postCreateValidation } from "./validations.js";
 import checkAuth from "./utils/checkAuth.js";
 import * as userController from "./controllers/userController.js";
+import * as postController from './controllers/PostController.js';
 
 mongoose
   .connect("mongodb+srv://dariab:wwwwww@cluster0.x3phn9n.mongodb.net/blog")
@@ -18,6 +19,11 @@ app.post("/auth/login", loginValidation, userController.login);
 app.post("/auth/register", registerValidation, userController.register);
 
 app.get('/auth/me', checkAuth, userController.getMe);
+app.get('/posts', postController.getAll);
+// app.get('/posts/id:', PostController.getOne);
+app.post('/posts/', checkAuth, postCreateValidation, postController.create);
+// app.delete('/posts/', PostController.remove);
+// app.patch('/posts/', PostController.update);
 
 app.listen(444, (err) => {
   if (err) {
