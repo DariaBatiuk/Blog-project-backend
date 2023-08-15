@@ -20,10 +20,10 @@ app.post("/auth/register", registerValidation, userController.register);
 
 app.get('/auth/me', checkAuth, userController.getMe);
 app.get('/posts', postController.getAll);
-// app.get('/posts/id:', PostController.getOne);
+app.get('/posts/:id', postController.getOne);
 app.post('/posts/', checkAuth, postCreateValidation, postController.create);
-// app.delete('/posts/', PostController.remove);
-// app.patch('/posts/', PostController.update);
+app.delete('/posts/:id', checkAuth, postController.remove);
+app.patch('/posts/:id', postController.update);
 
 app.listen(444, (err) => {
   if (err) {
