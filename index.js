@@ -1,9 +1,11 @@
 import express from "express";
 import mongoose from "mongoose";
 import { registerValidation, loginValidation, postCreateValidation } from "./validations.js";
-import { checkAuth, handleValidationErrors } from './server/utils/index.js';
-import { userController, postController} from './server/controllers/index.js';
+import { checkAuth, handleValidationErrors } from './utils/index.js';
+import { userController, postController} from './controllers/index.js';
 import multer from 'multer';
+import cors from 'cors';
+
 
 mongoose
   .connect("mongodb+srv://dariab:wwwwww@cluster0.x3phn9n.mongodb.net/blog")
@@ -24,6 +26,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 app.use(express.json());
+app.use(cors());
 app.use('/uploads', express.static('uploads'));
 
 app.post("/auth/login", loginValidation, handleValidationErrors, userController.login);
@@ -41,6 +44,9 @@ app.get('/posts/:id', postController.getOne);
 app.post('/posts/', checkAuth, postCreateValidation, handleValidationErrors, postController.create);
 app.delete('/posts/:id', checkAuth, postController.remove);
 app.patch('/posts/:id', checkAuth, postCreateValidation, handleValidationErrors, postController.update);
+
+app.get('/tags', postController.getLastTags);
+app.get('/posts/tags', postController.getLastTags);
 
 app.listen(444, (err) => {
   if (err) {
