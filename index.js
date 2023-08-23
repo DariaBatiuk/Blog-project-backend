@@ -8,7 +8,7 @@ import cors from 'cors';
 
 
 mongoose
-  .connect("mongodb+srv://dariab:wwwwww@cluster0.x3phn9n.mongodb.net/blog")
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log("DB ok"))
   .catch(() => console.log("DB error", err));
 
@@ -48,7 +48,7 @@ app.patch('/posts/:id', checkAuth, postCreateValidation, handleValidationErrors,
 app.get('/tags', postController.getLastTags);
 app.get('/posts/tags', postController.getLastTags);
 
-app.listen(444, (err) => {
+app.listen(process.env.PORT || 444, (err) => {
   if (err) {
     return console.log(err);
   }
